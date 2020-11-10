@@ -5,7 +5,7 @@
 
 using namespace std;
 
-vector <double> polynomyal(double x, int N) // полиномы Чебышева 1го рода
+vector <double> polynomyal(double x, int N) 
 {
     vector <double> p_j = { 1, x };
 
@@ -15,7 +15,7 @@ vector <double> polynomyal(double x, int N) // полиномы Чебышева
     return p_j;
 }
 
-vector <vector <double>> fill_matrix_a(vector <double> & x, int N) // заполняем матрицу А
+vector <vector <double>> fill_matrix_a(vector <double> & x, int N) 
 {
     vector <vector <double>> matrix;
 
@@ -27,7 +27,7 @@ vector <vector <double>> fill_matrix_a(vector <double> & x, int N) // запол
     return matrix;
 }
 
-void givens_rotation(vector <vector <double>> & matrix_a, vector <double> & phi, int N) // вращение Гивенса
+void givens_rotation(vector <vector <double>> & matrix_a, vector <double> & phi, int N) 
 {
     int m = matrix_a.size();
 
