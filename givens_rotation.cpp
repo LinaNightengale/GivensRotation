@@ -5,32 +5,8 @@
 
 using namespace std;
 
-vector <double> polynomyal(double x, int N) 
+void givens_rotation(vector <vector <double>> & matrix_a, vector <double> & phi, int m, int N) 
 {
-    vector <double> p_j = { 1, x };
-
-    for (int j = 2; j < N; ++j)
-        p_j.push_back(2. * x * p_j[j - 1] - p_j[j - 2]);
-
-    return p_j;
-}
-
-vector <vector <double>> fill_matrix_a(vector <double> & x, int N) 
-{
-    vector <vector <double>> matrix;
-
-    int m = x.size();
-
-    for (int i = 0; i < m; ++i)
-        matrix.push_back(polynomyal(x[i], N));
-
-    return matrix;
-}
-
-void givens_rotation(vector <vector <double>> & matrix_a, vector <double> & phi, int N) 
-{
-    int m = matrix_a.size();
-
     for (int i = 0; i < N; ++i)
     {
         for (int j = (m - 1); j >= 0; --j)
@@ -65,10 +41,9 @@ void givens_rotation(vector <vector <double>> & matrix_a, vector <double> & phi,
 
 vector <double> reverse_Gaussian(vector <vector <double>> & matrix_a, vector <double> & phi, int N)
 {
-    vector <double> matrix_x(N);
-
     double buffer_1, buffer_2;
-
+    vector <double> matrix_x(N);
+    
     for (int i = N - 1; i >= 0; --i)
     {
         buffer_1 = 0.;
@@ -82,69 +57,25 @@ vector <double> reverse_Gaussian(vector <vector <double>> & matrix_a, vector <do
     return matrix_x;
 }
 
-vector <vector <double>> transpose(vector <vector <double>> & matrix_a, int N)
+void scan_m(vector <vector <double>> & matrix_a, vector <double> & phi, int m, int N)
 {
-    int m = matrix_a.size();
-
-    vector <vector <double>> matrix_a_t(N, vector <double> (m, 0));
-
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < m; ++j)
-            matrix_a_t[i][j] = matrix_a[j][i];
-
-    return matrix_a_t;
-}
-
-vector <vector <double>> mult(vector <vector <double>> matrix_left, vector< vector<double>> matrix_right)
-{
-  int l = matrix_left.size(), m = matrix_left[0].size(), n = matrix_right[0].size();
-
-  vector <vector <double>> matrix(l, vector <double> (n, 0));
-
-  for (int i = 0; i < l; ++i)
-    for (int j = 0; j < n; ++j)
-      for (int k = 0; k < m; ++k)
-        matrix[i][j] += matrix_left[i][k] * matrix_right[k][j];
-
-  return matrix;
-}
-
-vector <double> normal_equation(vector <vector <double>> & matrix_a, vector <double> & phi, int N)
-{
-    int m = phi.size();
-    vector <double> x;
-    vector <vector <double>> AT = transpose(matrix_a, N);
-    vector <vector <double>> ATA = mult(AT, matrix_a);
-    vector <double> ATphi (N);
-
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < m; ++j)
+    cout << "Enter the matrix A: " << endl;
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < N; ++j)
         {
-            ATphi[i] += AT[i][j] * phi[j];
+            cin >> matrix_a[i][j];
         }
-    givens_rotation(ATA, ATphi, N);
-    x = reverse_Gaussian(ATA, ATphi, N);
-    return x;
-}
-
-double f(double x, vector <double> & c, int N)
-{
-    double y = 0.;
-    vector <double> buffer = polynomyal(x, N);
-
-    for (int j = 0; j < N; ++j)
+  
+    cout << "Enter the matrix b: " << endl;
+    for (int i = 0; i < m; ++i)
     {
-        y += c[j] * buffer[j];
-    }
-    return y;
+        cin >> phi[i];
+    }   
+}
+void print_m(vector <double> & x, int N) 
+{
+   cout << "Result: " << endl;
+    for (int i = 0; i < N; ++i)
+        cout << x[i] << endl;
 }
 
-void print_m(vector <vector <double>> & m) 
-{
-    for (auto col : m) 
-    {
-        for (auto el : col)
-            cout << el << ' ';
-        cout << endl;
-    }
-}
